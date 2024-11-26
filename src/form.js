@@ -1,5 +1,6 @@
 const overlay = document.getElementById("overlay");
 const form = overlay.querySelector("#create-player-form");
+const validationAlert = form.querySelector("#alert");
 const createPlayerBtn = document.getElementById("show-form-btn");
 
 const fullnameInput = overlay.querySelector("#fullname");
@@ -17,6 +18,7 @@ let selectedStats = normalPlayerStats;
 loadPositionsInInput();
 loadClubs();
 loadCountries();
+statsInputsEvents();
 
 createPlayerBtn.onclick = function (){
     overlay.classList.remove("hidden");
@@ -32,9 +34,16 @@ form.onsubmit = function(e) {
     e.preventDefault();
 
     let playerData = getFormData();
+
+    let invalidMessage = validateData(playerData);
+    if (invalidMessage != 1) {
+        showAlert(invalidMessage);
+        return;
+    }
     
     substitutions.push(playerData);
     showSubstitutionsPlayers();
+    closeForm();
 }
 
 
@@ -116,6 +125,19 @@ async function loadCountries() {
     })
 }
 
+function statsInputsEvents() {
+    playerStatsInputs.forEach(input => {
+        input.addEventListener("keyup", function(e) {
+            let value = parseInt(input.value);
+            if (value < 0) {
+                input.value = 0;
+            } else if (value > 100) {
+                input.value = 100;
+            }
+        })
+    })
+}
+
 function getFormData() {
 
     let isGK = positionsInput.value === "GK";
@@ -149,13 +171,70 @@ function getFormData() {
     stats.rating = Math.ceil(stats.rating);
 
     return  {
-        name: fullnameInput.value,
+        name: capitalize(fullnameInput.value.trim()),
         photo: null,
-        position: positionsInput.value,
-        nationality: countriesInput.value,
+        position: getSelectedValueFromSelectTag(positionsInput),
+        nationality: getSelectedValueFromSelectTag(countriesInput),
         flag: countriesInput.getAttribute("data-flag"),
-        club: clubsInput.value,
+        club: getSelectedValueFromSelectTag(clubsInput),
         logo: clubsInput.getAttribute("data-logo"),
         ...stats
       }
+}
+
+function validateData(playerData) {
+    let nameRegex = /^[^;?!@&#$]+$/;
+
+    if (! nameRegex.test(playerData.name)) {
+        return "Invalid characters in the name field.";
+    }
+
+    if (!playerData.position) {
+        return "Please select the player position.";
+    }
+
+    if (!playerData.club) {
+        return "Please select a club.";
+    }
+
+    if (!playerData.nationality) {
+        return "Please select a country.";
+    }
+
+    if (!playerData.rating) {
+        return "Please enter the player stats.";
+    }
+
+    return 1;
+}
+
+function closeForm() {
+    overlay.classList.add("hidden");
+}
+
+function getSelectedValueFromSelectTag(selectTag) {
+
+    const options = selectTag.children;
+    
+    for (let option of options) {
+        if (option.selected) {
+            return option.getAttribute("value");
+        }
+    }
+    
+    return null;
+}
+
+function capitalize(string) {
+    return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
+}
+
+function showAlert(message) {
+    validationAlert.textContent = message;
+    validationAlert.classList.remove("hidden");
+}
+
+function hideAlert() {
+    validationAlert.textContent = "";
+    validationAlert.classList.add("hidden");
 }
