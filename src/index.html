@@ -10,6 +10,81 @@
 </head>
 <body class="bg-slate-950">
 
+    <div id="overlay" class="absolute flex justify-center items-center z-50 w-full h-full bg-slate-950 bg-opacity-60">
+        <form id="create-player-form" class="bg-slate-900 text-white w-1/2 p-5 rounded-lg">
+            <h3 class="text-3xl text-center font-semibold mb-4">Create Player</h3>
+            <div class="flex gap-16 items-end mb-4">
+                <div class="flex flex-col gap-2 flex-1">
+                    <label for="fullname" class="text-base">Full Name</label>
+                    <input type="text" id="fullname" class="text-slate-900 outline-none border-none px-3 py-2 rounded-lg" placeholder="Exp: Ilyass Anida">
+                </div>
+                <div class="flex items-end justify-between">
+                    <div class="flex flex-col">
+                        <select id="clubs" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
+                          <option selected>Choose a Position</option>
+                          <option>CF</option>
+                          <option>LW</option>
+                          <option>RW</option>
+                          <option>CM</option>
+                          <option>LB</option>
+                          <option>CB</option>
+                          <option>RB</option>
+                          <option>GK</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-5 mb-4">
+                <div class="flex items-end justify-between flex-1 gap-3">
+                    <div class="flex flex-col flex-1">
+                        <label for="clubs" class="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
+                        <select id="clubs" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
+                          <option selected>Choose a Club</option>
+                        </select>
+                    </div>
+                    <img src="../assets/images/user.svg" alt="default logo" class="w-16 h-16">
+                </div>
+                <div class="flex items-end justify-between flex-1 gap-3">
+                    <div class="flex flex-col flex-1">
+                        <label for="clubs" class="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
+                        <select id="clubs" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
+                          <option selected>Choose a Country</option>
+                        </select>
+                    </div>
+                    <img src="../assets/images/user.svg" alt="default logo" class="w-16 h-16">
+                </div>
+            </div>
+            <div class="flex gap-2 text-sm justify-between mb-8">
+                <div class="flex flex-col">
+                    <label for="pac" class="mb-1 text-base">PAC</label>
+                    <input type="number" name="pac" id="pac" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                </div>
+                <div class="flex flex-col">
+                    <label for="pac" class="mb-1 text-base">SHO</label>
+                    <input type="number" name="sho" id="sho" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                </div>
+                <div class="flex flex-col">
+                    <label for="pac" class="mb-1 text-base">PAS</label>
+                    <input type="number" name="pas" id="pas" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                </div>
+                <div class="flex flex-col">
+                    <label for="pac" class="mb-1 text-base">DRI</label>
+                    <input type="number" name="dri" id="dri" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                </div>
+                <div class="flex flex-col">
+                    <label for="pac" class="mb-1 text-base">DEF</label>
+                    <input type="number" name="def" id="def" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                </div>
+                <div class="flex flex-col">
+                    <label for="pac" class="mb-1 text-base">PHY</label>
+                    <input type="number" name="phy" id="pac" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                </div>
+            </div>
+
+            <button class="block mx-auto bg-green-600 py-1 px-4 text-lg rounded-lg">Create +</button>
+        </form>
+    </div>
+
     <main class="flex flex-col gap-10 lg:gap-0 lg:flex-row items-center justify-between h-full py-3">
         <div id="field" class="relative rounded-lg overflow-hidden max-w-[630px] border-2 border-green-900">
             <img src="../assets/images/stadium_background.webp" alt="field" class="w-full h-full">
