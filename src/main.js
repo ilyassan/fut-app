@@ -1,11 +1,12 @@
+const positions = ["ST", "LW", "RW", "CB", "RB", "LB", "GK"];
 let substitutions = [];
 let fieldPlayers = [];
 
 async function loadPlayers () {
-    let res = await fetch('../players.json');
-    let data = await res.json();
+    if (substitutions.length > 0) return;
 
-    substitutions = data.players;
+    let res = await axios('../players.json');
+    substitutions = res.data;
 }
 
 async function showSubstitutionsPlayers() {
@@ -33,7 +34,7 @@ function substitutionCard({name, position, rating, photo:playerImage, logo:clubI
                                     ${position}
                                 </div>
                                 <div class="w-14 h-14">
-                                    <img src="${playerImage}" alt="${name}">
+                                    <img class="h-full" src="${playerImage || "../assets/images/ano.png"}" alt="${name}">
                                 </div>
                                 <div class="flex flex-col gap-1.5">
                                     <span class="text-secondary text-sm font-semibold">${name}</span>

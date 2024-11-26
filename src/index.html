@@ -10,26 +10,19 @@
 </head>
 <body class="bg-slate-950">
 
-    <div id="overlay" class="absolute flex justify-center items-center z-50 w-full h-full bg-slate-950 bg-opacity-60">
-        <form id="create-player-form" class="bg-slate-900 text-white w-1/2 p-5 rounded-lg">
+    <div id="overlay" class="hidden absolute z-50 w-full h-full bg-slate-950 bg-opacity-70">
+        <form id="create-player-form" class="block mt-12 m-auto bg-slate-900 text-white w-11/12 sm:w-4/5 md:w-4/6 lg:w-1/2 p-5 rounded-lg">
             <h3 class="text-3xl text-center font-semibold mb-4">Create Player</h3>
+            <div id="alert" class="hidden w-full bg-red-300 text-red-800 rounded-lg py-1 px-2 text-center mb-2"></div>
             <div class="flex gap-16 items-end mb-4">
                 <div class="flex flex-col gap-2 flex-1">
                     <label for="fullname" class="text-base">Full Name</label>
-                    <input type="text" id="fullname" class="text-slate-900 outline-none border-none px-3 py-2 rounded-lg" placeholder="Exp: Ilyass Anida">
+                    <input type="text" id="fullname" class="text-slate-900 outline-none border-none px-3 py-2 rounded-lg" placeholder="Exp: Ilyass Anida" autocomplete="off">
                 </div>
                 <div class="flex items-end justify-between">
                     <div class="flex flex-col">
-                        <select id="clubs" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
+                        <select id="positions" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
                           <option selected>Choose a Position</option>
-                          <option>CF</option>
-                          <option>LW</option>
-                          <option>RW</option>
-                          <option>CM</option>
-                          <option>LB</option>
-                          <option>CB</option>
-                          <option>RB</option>
-                          <option>GK</option>
                         </select>
                     </div>
                 </div>
@@ -42,42 +35,46 @@
                           <option selected>Choose a Club</option>
                         </select>
                     </div>
-                    <img src="../assets/images/user.svg" alt="default logo" class="w-16 h-16">
+                    <div class="w-12 h-12">
+                        <img src="" alt="Club logo" class="hidden">
+                    </div>
                 </div>
                 <div class="flex items-end justify-between flex-1 gap-3">
                     <div class="flex flex-col flex-1">
-                        <label for="clubs" class="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
-                        <select id="clubs" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
+                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900">Select an option</label>
+                        <select id="countries" class="bg-white outline-none border text-slate-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-0">
                           <option selected>Choose a Country</option>
                         </select>
                     </div>
-                    <img src="../assets/images/user.svg" alt="default logo" class="w-16 h-16">
+                    <div class="w-10 h-11 flex items-center">
+                        <img src="" alt="Club logo" class="hidden">
+                    </div>
                 </div>
             </div>
-            <div class="flex gap-2 text-sm justify-between mb-8">
+            <div class="flex flex-wrap gap-2 text-sm md:justify-between mb-8">
                 <div class="flex flex-col">
-                    <label for="pac" class="mb-1 text-base">PAC</label>
-                    <input type="number" name="pac" id="pac" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                    <label class="mb-1 text-base">PAC</label>
+                    <input type="number" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="0 - 100" min="0" max="100">
                 </div>
                 <div class="flex flex-col">
-                    <label for="pac" class="mb-1 text-base">SHO</label>
-                    <input type="number" name="sho" id="sho" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                    <label class="mb-1 text-base">SHO</label>
+                    <input type="number" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="0 - 100" min="0" max="100">
                 </div>
                 <div class="flex flex-col">
-                    <label for="pac" class="mb-1 text-base">PAS</label>
-                    <input type="number" name="pas" id="pas" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                    <label class="mb-1 text-base">PAS</label>
+                    <input type="number" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="0 - 100" min="0" max="100">
                 </div>
                 <div class="flex flex-col">
-                    <label for="pac" class="mb-1 text-base">DRI</label>
-                    <input type="number" name="dri" id="dri" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                    <label class="mb-1 text-base">DRI</label>
+                    <input type="number" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="0 - 100" min="0" max="100">
                 </div>
                 <div class="flex flex-col">
-                    <label for="pac" class="mb-1 text-base">DEF</label>
-                    <input type="number" name="def" id="def" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                    <label class="mb-1 text-base">DEF</label>
+                    <input type="number" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="0 - 100" min="0" max="100">
                 </div>
                 <div class="flex flex-col">
-                    <label for="pac" class="mb-1 text-base">PHY</label>
-                    <input type="number" name="phy" id="pac" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="1 - 100" min="0" max="100">
+                    <label class="mb-1 text-base">PHY</label>
+                    <input type="number" class="text-slate-900 outline-none rounded-lg p-1 text-center" placeholder="0 - 100" min="0" max="100">
                 </div>
             </div>
 
@@ -272,7 +269,7 @@
             </div>
         </div>
         <div class="bg-slate-900 w-[300px] h-[55vh] lg:h-[95vh] rounded-s-lg overflow-scroll no-scrollbar">
-            <h1 class="text-white text-3xl text-center mt-2 pb-3 border-b border-white font-semibold">Substitutions</h1>
+            <h1 class="text-white text-3xl text-center mt-2 pb-3 border-b border-white font-semibold">Substitutions <span id="show-form-btn" class="text-4xl cursor-pointer">+</span></h1>
 
             <div id="substitutions" class="flex flex-col gap-6 px-3 mt-6">
 
@@ -282,5 +279,6 @@
     
     <script src="../node_modules/axios/dist/axios.min.js"></script>
     <script src="main.js"></script>
+    <script src="form.js"></script>
 </body>
 </html>
