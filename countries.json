@@ -1,0 +1,12 @@
+[
+  { "country": "Argentina", "flag": "https://flagcdn.com/w320/ar.png" },
+  { "country": "Portugal", "flag": "https://flagcdn.com/w320/pt.png" },
+  { "country": "Belgium", "flag": "https://flagcdn.com/w320/be.png" },
+  { "country": "France", "flag": "https://flagcdn.com/w320/fr.png" },
+  { "country": "Netherlands", "flag": "https://flagcdn.com/w320/nl.png" },
+  { "country": "Germany", "flag": "https://flagcdn.com/w320/de.png" },
+  { "country": "Brazil", "flag": "https://flagcdn.com/w320/br.png" },
+  { "country": "Egypt", "flag": "https://flagcdn.com/w320/eg.png" },
+  { "country": "Croatia", "flag": "https://flagcdn.com/w320/hr.png" },
+  { "country": "Morocco", "flag": "https://flagcdn.com/w320/ma.png" }
+]
