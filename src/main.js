@@ -134,6 +134,19 @@ function playerFieldCardEvent(card) {
             filterSubstitutionsPlayers(cardPosition);
         }
     })
+
+    card.addEventListener("click", function() {
+        if (replacedCacheCard && replacedCacheCard != card) {
+            let targetCardPosition = card.getAttribute("data-position");
+            let replacedCardPosition = replacedCacheCard.getAttribute("data-position");
+
+            if (! getAvailablePositionsFromOnePosition(replacedCardPosition).includes(targetCardPosition)) {
+                return;
+            }
+
+            swapTwoCardElements(card);
+        }
+    })
 }
 
 function emptyFieldCard(position) {
@@ -149,9 +162,16 @@ function emptyFieldCard(position) {
 }
 
 function emptyFieldCardEvent(card){
-
     card.querySelector(".add-player").addEventListener("click", function() {
         let position = card.getAttribute("data-position");
+
+        if (replacedCacheCard && getAvailablePositionsFromOnePosition(position).includes(replacedCacheCard.getAttribute("data-position"))) {
+            swapTwoCardElements(card, true);
+            return;
+        }
+
+        if (replacedCacheCard) return;
+        
         let oldPosition = emptyCacheCard?.getAttribute("data-position");
         emptyCacheCard = card;
 
@@ -223,4 +243,24 @@ function searchInputEvents() {
             }
         })
     })
+}
+
+function swapTwoCardElements(card, isCardTypeEmpty = false) {
+    let targetCardClone = card.cloneNode(true);
+    let replacedCardClone = replacedCacheCard.cloneNode(true);
+
+    replacedCardClone.querySelector(".change-player i").classList.remove("animate-spin");
+
+    replacedCacheCard.parentNode.replaceChild(targetCardClone, replacedCacheCard);
+    card.parentNode.replaceChild(replacedCardClone, card);
+
+    playerFieldCardEvent(replacedCardClone);
+    if (isCardTypeEmpty) {
+        emptyFieldCardEvent(targetCardClone);
+    }else{
+        playerFieldCardEvent(targetCardClone);
+    }
+    
+    replacedCacheCard = null;
+    showSubstitutionsPlayers();
 }
