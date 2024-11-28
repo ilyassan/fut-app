@@ -9,6 +9,7 @@ const formationLines = document.querySelectorAll("#formation .line");
 let emptyCacheCard;
 let replacedCacheCard;
 
+searchInputEvents();
 showSubstitutionsPlayers();
 showEmptyFieldCards();
 
@@ -162,7 +163,9 @@ function emptyFieldCardEvent(card){
 }
 
 function filterSubstitutionsPlayers(position) {
-    let filteredArray = substitutions.filter(player => player.position === position);
+    let availablePositions = getAvailablePositionsFromOnePosition(position);
+    
+    let filteredArray = substitutions.filter(player => availablePositions.includes(player.position));
 
     showSubstitutionsPlayers(filteredArray);
 }
@@ -185,5 +188,39 @@ function substitutionCardEvents(card, isActive) {
             addPlayerToField(playerData);
             showSubstitutionsPlayers();
         }
+    })
+}
+
+function getAvailablePositionsFromOnePosition(position){ // input: ST -> output -> [LW, ST, RW]
+    for (let i = 0; i < allFieldPositions.length; i++) {
+        for (let j = 0; j < allFieldPositions[i].length; j++) {
+            if (allFieldPositions[i][j] == position) {
+                return allFieldPositions[i];
+            }
+        }
+    }
+}
+
+function searchInputEvents() {
+    const searchInput = document.getElementById("search-player");
+    
+    searchInput.addEventListener("input", function() {
+        let playersElements = Array.from(document.getElementById("substitutions").children);
+        let searchValue = searchInput.value.toLowerCase();
+
+        playersElements.forEach(function(playerElement){
+            let {name, position, club, nationality} = substitutions.find(player => player.name == playerElement.getAttribute("data-name"));
+            
+            if (
+                name.toLowerCase().search(searchValue) != -1 ||
+                position.toLowerCase().search(searchValue) != -1 ||
+                club.toLowerCase().search(searchValue) != -1 ||
+                nationality.toLowerCase().search(searchValue) != -1
+            ) {
+                playerElement.classList.remove("hidden");
+            }else{
+                playerElement.classList.add("hidden");
+            }
+        })
     })
 }
