@@ -6,7 +6,8 @@ const fieldPlayers = [];
 
 const formationLines = document.querySelectorAll("#formation .line");
 
-let cacheCard;
+let emptyCacheCard;
+let replacedCacheCard;
 
 showSubstitutionsPlayers();
 showEmptyFieldCards();
@@ -28,7 +29,7 @@ async function showSubstitutionsPlayers(filteredArray = false) {
     let array = substitutions;
     let isPlayersActive = false;
 
-    if (filteredArray != false) {
+    if (filteredArray !== false) {
         array = filteredArray
         isPlayersActive = true;
     }
@@ -42,8 +43,14 @@ async function showSubstitutionsPlayers(filteredArray = false) {
 
 function addPlayerToField(playerData) {
     let card = playerFieldCard(playerData);
-    cacheCard.replaceWith(card);
-    cacheCard = null;
+    if (emptyCacheCard) {
+        emptyCacheCard.replaceWith(card);
+        emptyCacheCard = null;
+    }else {
+        replacedCacheCard.replaceWith(card);
+        replacedCacheCard = null; 
+    }
+    playerFieldCardEvent(card);
 }
 
 function showEmptyFieldCards() {
@@ -93,8 +100,11 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
     let tempDiv = document.createElement("div");
 
     tempDiv.innerHTML = `
-    <div class="cursor-pointer relative card w-22">
+    <div data-name="${name}" data-position="${position}" class="cursor-pointer relative card w-22 transition-all hover:-translate-y-1 hover:scale-105">
         <img src="../assets/images/card.webp" alt="Player Card">
+        <span class="change-player z-10 absolute left-1/2 -translate-x-1/2 -bottom-1">
+            <i class="hover:animate-spin fa-solid fa-arrows-rotate text-white text-base cursor-pointer"></i>
+        </span>
         <img src="${playerImage}" alt="Cristiano Ronaldo" class="absolute bottom-[36%] left-1/2 -translate-x-1/2 w-3/5">
         <div class="flex flex-col items-center absolute font-bold top-[20%] left-[12%] text-secondary">
             <div class="text-xs">${rating}</div>
@@ -112,6 +122,19 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
     return tempDiv.firstElementChild;
 }
 
+function playerFieldCardEvent(card) {
+    let cardPosition = card.getAttribute("data-position");
+    let changePlayerBtn = card.querySelector(".change-player");
+
+    changePlayerBtn.addEventListener("click", function() {
+        if (! replacedCacheCard) {
+            card.querySelector("i").classList.add("animate-spin");
+            replacedCacheCard = card;
+            filterSubstitutionsPlayers(cardPosition);
+        }
+    })
+}
+
 function emptyFieldCard(position) {
     let tempDiv = document.createElement("div");
 
@@ -124,13 +147,12 @@ function emptyFieldCard(position) {
     return tempDiv.firstElementChild;
 }
 
-
 function emptyFieldCardEvent(card){
 
     card.querySelector(".add-player").addEventListener("click", function() {
         let position = card.getAttribute("data-position");
-        let oldPosition = cacheCard?.getAttribute("data-position");
-        cacheCard = card;
+        let oldPosition = emptyCacheCard?.getAttribute("data-position");
+        emptyCacheCard = card;
 
         if (oldPosition != position) {
             filterSubstitutionsPlayers(position);
@@ -153,6 +175,13 @@ function substitutionCardEvents(card, isActive) {
 
             let playerData = substitutions.splice(playerIndex, 1)[0];
             fieldPlayers.push(playerData);
+
+            if (replacedCacheCard) { // if there is a card to move it out of the field to the substitutions
+                let replacedPlayerIndex = fieldPlayers.findIndex(player => player.name === replacedCacheCard.getAttribute("data-name"));
+                let replacedPlayerData = fieldPlayers.splice(replacedPlayerIndex, 1)[0];
+                substitutions.push(replacedPlayerData);
+            }
+
             addPlayerToField(playerData);
             showSubstitutionsPlayers();
         }
