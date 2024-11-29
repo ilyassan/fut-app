@@ -188,6 +188,12 @@ function validateData(playerData) {
 
     const emptyRegex = /^\s*$/;
 
+    let isExist = substitutions.concat(fieldPlayers).find(player => player.name === playerData.name);
+
+    if (isExist) {
+        return "Player name is already exist.";
+    }
+
     if (emptyRegex.test(playerData.name)) {
         return "Please fill the name field.";
     }

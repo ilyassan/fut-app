@@ -112,7 +112,7 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
         <span class="delete-player transition-all left-1/2 group-hover:left-full absolute -z-10 top-1/2 -translate-y-1/2 bg-white rounded-full px-[.2rem]">
             <i class="fa-solid fa-trash text-red-700 text-sm cursor-pointer"></i>
         </span>
-        <img src="${playerImage}" alt="Cristiano Ronaldo" class="absolute bottom-[36%] left-1/2 -translate-x-1/2 w-3/5">
+        <img src="${playerImage || "../assets/images/ano.png"}" alt="${name}" class="absolute bottom-[36%] left-1/2 -translate-x-1/2 w-3/5">
         <div class="flex flex-col items-center absolute font-bold top-[20%] left-[12%] text-secondary">
             <div class="text-xs">${rating}</div>
             <span class="text-[.45rem]">${position}</span>
@@ -148,6 +148,8 @@ function playerFieldCardEvent(card) {
 
 
     changePlayerBtn.addEventListener("click", function() {
+        if (emptyCacheCard) return;
+        
         if (! replacedCacheCard) {
             card.querySelector("i").classList.add("animate-spin");
             replacedCacheCard = card;
@@ -245,14 +247,17 @@ function filterSearch() {
     let playersElements = Array.from(document.getElementById("substitutions").children);
     let searchValue = searchInput.value.toLowerCase();
 
+
+
     playersElements.forEach(function(playerElement){
-        let {name, position, club, nationality} = substitutions.find(player => player.name == playerElement.getAttribute("data-name"));
-        
+        let {name, position, club, nationality, rating} = substitutions.find(player => player.name == playerElement.getAttribute("data-name"));
+    
         if (
             name.toLowerCase().search(searchValue) != -1 ||
             position.toLowerCase().search(searchValue) != -1 ||
             club.toLowerCase().search(searchValue) != -1 ||
-            nationality.toLowerCase().search(searchValue) != -1
+            nationality.toLowerCase().search(searchValue) != -1 ||
+            (rating + "").search(searchValue) != -1
         ) {
             playerElement.classList.remove("hidden");
         }else{
