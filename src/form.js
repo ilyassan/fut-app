@@ -26,6 +26,7 @@ createPlayerBtn.onclick = function (){
     overlay.onclick = function(e) {
         if (e.target == overlay) {
             overlay.classList.add("hidden");
+            hideAlert();
         }
     }
 }
@@ -183,26 +184,32 @@ function getFormData() {
 }
 
 function validateData(playerData) {
-    let nameRegex = /^[^;?!@&#$]+$/;
+    const nameRegex = /^[^:;?!@&#$<>&'"]+$/;
 
-    if (! nameRegex.test(playerData.name)) {
-        return "Invalid characters in the name field.";
+    const emptyRegex = /^\s*$/;
+
+    if (emptyRegex.test(playerData.name)) {
+        return "Please fill the name field.";
     }
 
-    if (!playerData.position) {
+    if (!nameRegex.test(playerData.name)) {
+        return "Invalid characters in the name field.";
+    }
+    
+    if (emptyRegex.test(playerData.position)) {
         return "Please select the player position.";
     }
 
-    if (!playerData.club) {
+    if (emptyRegex.test(playerData.club)) {
         return "Please select a club.";
     }
 
-    if (!playerData.nationality) {
+    if (emptyRegex.test(playerData.nationality)) {
         return "Please select a country.";
     }
 
-    if (!playerData.rating) {
-        return "Please enter the player stats.";
+    if (isNaN(playerData.rating)) {
+        return "Please fill the player stats.";
     }
 
     return 1;
@@ -218,11 +225,10 @@ function getSelectedValueFromSelectTag(selectTag) {
     
     for (let option of options) {
         if (option.selected) {
-            return option.getAttribute("value");
+            return option.getAttribute("value") || "";
         }
     }
-    
-    return null;
+
 }
 
 function capitalize(string) {
