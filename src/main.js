@@ -131,10 +131,12 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
 
 function playerFieldCardEvent(card) {
     let cardPosition = card.getAttribute("data-position");
-    let changePlayerBtn = card.querySelector(".change-player");
-    let deletePlayerBtn = card.querySelector(".delete-player");
+    let changePlayerBtn = card.querySelector(".change-player i");
+    let deletePlayerBtn = card.querySelector(".delete-player i");
 
     deletePlayerBtn.addEventListener("click", function() {
+        if (replacedCacheCard) return;
+
         let playerIndex = fieldPlayers.findIndex(player => player.name == card.getAttribute("data-name"));
         let playerData = fieldPlayers.splice(playerIndex, 1)[0];
 
@@ -151,13 +153,13 @@ function playerFieldCardEvent(card) {
         if (emptyCacheCard) return;
         
         if (! replacedCacheCard) {
-            card.querySelector("i").classList.add("animate-spin");
+            changePlayerBtn.classList.add("animate-spin");
             replacedCacheCard = card;
             filterSubstitutionsPlayers(cardPosition);
         }
     })
 
-    card.addEventListener("click", function() {
+    card.addEventListener("click", function(e) {
         if (replacedCacheCard && replacedCacheCard != card) {
             let targetCardPosition = card.getAttribute("data-position");
             let replacedCardPosition = replacedCacheCard.getAttribute("data-position");
@@ -167,6 +169,10 @@ function playerFieldCardEvent(card) {
             }
 
             swapTwoCardElements(card);
+        }else{
+            if (e.target == changePlayerBtn || e.target == deletePlayerBtn) return; // If the user clicked on a children of the card and not the card
+            let playerData = fieldPlayers.find(player => player.name == card.getAttribute("data-name"));
+            showPlayerDetails(playerData);
         }
     })
 }
@@ -214,10 +220,10 @@ function filterSubstitutionsPlayers(position) {
 
 function substitutionCardEvents(card, isActive) {
     card.addEventListener("click", function() {
-        if (isActive) {
-            let playerUniqueName = card.getAttribute("data-name");
-            let playerIndex = substitutions.findIndex(player => player.name === playerUniqueName);
+        let playerUniqueName = card.getAttribute("data-name");
+        let playerIndex = substitutions.findIndex(player => player.name === playerUniqueName);
 
+        if (isActive) {
             let playerData = substitutions.splice(playerIndex, 1)[0];
             fieldPlayers.push(playerData);
 
@@ -229,6 +235,9 @@ function substitutionCardEvents(card, isActive) {
 
             addPlayerToField(playerData);
             showSubstitutionsPlayers();
+        }else {
+            let playerData = substitutions[playerIndex];
+            showPlayerDetails(playerData);
         }
     })
 }
