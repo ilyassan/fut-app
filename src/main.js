@@ -220,10 +220,10 @@ function filterSubstitutionsPlayers(position) {
 
 function substitutionCardEvents(card, isActive) {
     card.addEventListener("click", function() {
-        if (isActive) {
-            let playerUniqueName = card.getAttribute("data-name");
-            let playerIndex = substitutions.findIndex(player => player.name === playerUniqueName);
+        let playerUniqueName = card.getAttribute("data-name");
+        let playerIndex = substitutions.findIndex(player => player.name === playerUniqueName);
 
+        if (isActive) {
             let playerData = substitutions.splice(playerIndex, 1)[0];
             fieldPlayers.push(playerData);
 
@@ -235,6 +235,9 @@ function substitutionCardEvents(card, isActive) {
 
             addPlayerToField(playerData);
             showSubstitutionsPlayers();
+        }else {
+            let playerData = substitutions[playerIndex];
+            showPlayerDetails(playerData);
         }
     })
 }
