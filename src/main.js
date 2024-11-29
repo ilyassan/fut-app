@@ -1,15 +1,17 @@
-const positions = ["ST", "LW", "RW", "CM", "CB", "RB", "LB", "GK"];
-const allFieldPositions = [["LW", "ST", "RW"], ["CM", "CM", "CM"], ["LB", "CB", "CB", "RB"], ["GK"]];
+const positions = ["ST", "LW", "RW", "CM", "CDM", "CB", "RB", "LB", "GK"];
+const allFieldPositions = [["LW", "ST", "RW"], ["CM", "CDM", "CM"], ["LB", "CB", "CB", "RB"], ["GK"]];
 
 let substitutions = [];
 const fieldPlayers = [];
 
 const formationLines = document.querySelectorAll("#formation .line");
 
+const searchInput = document.getElementById("search-player");
+searchInput.addEventListener("input", () => filterSearch(searchInput.value));
+
 let emptyCacheCard;
 let replacedCacheCard;
 
-searchInputEvents();
 showSubstitutionsPlayers();
 showEmptyFieldCards();
 
@@ -40,6 +42,7 @@ async function showSubstitutionsPlayers(filteredArray = false) {
         container.appendChild(card);
         substitutionCardEvents(card, isPlayersActive);
     })
+    filterSearch();
 }
 
 function addPlayerToField(playerData) {
@@ -101,10 +104,13 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
     let tempDiv = document.createElement("div");
 
     tempDiv.innerHTML = `
-    <div data-name="${name}" data-position="${position}" class="cursor-pointer relative card w-22 transition-all hover:-translate-y-1 hover:scale-105">
+    <div data-name="${name}" data-position="${position}" class="cursor-pointer group relative card w-22 transition-all hover:-translate-y-1 hover:scale-105">
         <img src="../assets/images/card.webp" alt="Player Card">
         <span class="change-player z-10 absolute left-1/2 -translate-x-1/2 -bottom-1">
             <i class="hover:animate-spin fa-solid fa-arrows-rotate text-white text-base cursor-pointer"></i>
+        </span>
+        <span class="delete-player transition-all left-1/2 group-hover:left-full absolute -z-10 top-1/2 -translate-y-1/2 bg-white rounded-full px-[.2rem]">
+            <i class="fa-solid fa-trash text-red-700 text-sm cursor-pointer"></i>
         </span>
         <img src="${playerImage}" alt="Cristiano Ronaldo" class="absolute bottom-[36%] left-1/2 -translate-x-1/2 w-3/5">
         <div class="flex flex-col items-center absolute font-bold top-[20%] left-[12%] text-secondary">
@@ -126,6 +132,20 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
 function playerFieldCardEvent(card) {
     let cardPosition = card.getAttribute("data-position");
     let changePlayerBtn = card.querySelector(".change-player");
+    let deletePlayerBtn = card.querySelector(".delete-player");
+
+    deletePlayerBtn.addEventListener("click", function() {
+        let playerIndex = fieldPlayers.findIndex(player => player.name == card.getAttribute("data-name"));
+        let playerData = fieldPlayers.splice(playerIndex, 1)[0];
+
+        replacedCacheCard = card;
+        swapTwoCardElements(emptyFieldCard(playerData.position), true);
+        replacedCacheCard = null;
+
+        substitutions.push(playerData);
+        showSubstitutionsPlayers();
+    });
+
 
     changePlayerBtn.addEventListener("click", function() {
         if (! replacedCacheCard) {
@@ -221,31 +241,28 @@ function getAvailablePositionsFromOnePosition(position){ // input: ST -> output 
     }
 }
 
-function searchInputEvents() {
-    const searchInput = document.getElementById("search-player");
-    
-    searchInput.addEventListener("input", function() {
-        let playersElements = Array.from(document.getElementById("substitutions").children);
-        let searchValue = searchInput.value.toLowerCase();
+function filterSearch() {
+    let playersElements = Array.from(document.getElementById("substitutions").children);
+    let searchValue = searchInput.value.toLowerCase();
 
-        playersElements.forEach(function(playerElement){
-            let {name, position, club, nationality} = substitutions.find(player => player.name == playerElement.getAttribute("data-name"));
-            
-            if (
-                name.toLowerCase().search(searchValue) != -1 ||
-                position.toLowerCase().search(searchValue) != -1 ||
-                club.toLowerCase().search(searchValue) != -1 ||
-                nationality.toLowerCase().search(searchValue) != -1
-            ) {
-                playerElement.classList.remove("hidden");
-            }else{
-                playerElement.classList.add("hidden");
-            }
-        })
+    playersElements.forEach(function(playerElement){
+        let {name, position, club, nationality} = substitutions.find(player => player.name == playerElement.getAttribute("data-name"));
+        
+        if (
+            name.toLowerCase().search(searchValue) != -1 ||
+            position.toLowerCase().search(searchValue) != -1 ||
+            club.toLowerCase().search(searchValue) != -1 ||
+            nationality.toLowerCase().search(searchValue) != -1
+        ) {
+            playerElement.classList.remove("hidden");
+        }else{
+            playerElement.classList.add("hidden");
+        }
     })
 }
 
 function swapTwoCardElements(card, isCardTypeEmpty = false) {
+    // Fix positions attribute when changing player then fix delete
     let targetCardClone = card.cloneNode(true);
     let replacedCardClone = replacedCacheCard.cloneNode(true);
 
