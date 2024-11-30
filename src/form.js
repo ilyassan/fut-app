@@ -1,6 +1,7 @@
-(function(){
+function formEvents(){
     const overlay = document.getElementById("create-player-overlay");
     const form = overlay.querySelector("#create-player-form");
+    const emptyForm = form.cloneNode(true);
     const validationAlert = form.querySelector("#alert");
     const createPlayerBtn = document.getElementById("show-form-btn");
 
@@ -45,6 +46,7 @@
         
         substitutions.push(playerData);
         showSubstitutionsPlayers();
+        clearForm();
         closeForm();
 
         let players = JSON.parse(localStorage.getItem("players"));
@@ -242,6 +244,11 @@
 
     }
 
+    function clearForm() {
+        form.replaceWith(emptyForm);
+        formEvents();
+    }
+
     function capitalize(string) {
         return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
     }
@@ -255,4 +262,6 @@
         validationAlert.textContent = "";
         validationAlert.classList.add("hidden");
     }
-})();
+};
+
+formEvents();
