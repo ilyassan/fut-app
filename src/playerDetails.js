@@ -19,7 +19,7 @@ function getDetailsElementHtml(playerData) {
     let tempDiv = document.createElement("div");
 
     tempDiv.innerHTML = `
-            <div class="flex">
+            <div class="flex flex-col items-center sm:flex-row">
                 <div class="relative card select-none w-56">
                     <img src="../assets/images/card.webp" alt="Player Card">
                     <img src="${playerImage || "../assets/images/ano.png"}" alt="${name}" alt="${name}" class="absolute bottom-[36%] left-1/2 -translate-x-1/2 w-3/5">
@@ -33,7 +33,7 @@ function getDetailsElementHtml(playerData) {
                     </div>
                     <div class="flex items-center text-secondary flex-col left-0 top-[65%] absolute w-full">
                         <div class="text-sm text-center font-bold">${name}</div>
-                        <div class="flex w-full items-center justify-center gap-2">
+                        <div class="flex w-full justify-center gap-2">
                             <div class="flex flex-col text-xs font-semibold">
                                 ${ stats.slice(0, 3).map(stat =>
                                     `<div>${stat.value} <span>${stat.name}</span></div>`
@@ -51,7 +51,7 @@ function getDetailsElementHtml(playerData) {
                     </div>
                 </div>
     
-                <div class="flex flex-col gap-3 pt-8 pb-4 px-2">
+                <div class="flex flex-col gap-3 sm:pt-8 pb-6 sm:pb-4 px-4 sm:px-2">
                     <div class="flex gap-6">
                         <div class="flex flex-col gap-1">
                             <label>Full Name</label>
