@@ -104,24 +104,24 @@ function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLo
     let tempDiv = document.createElement("div");
 
     tempDiv.innerHTML = `
-    <div data-name="${name}" data-position="${position}" class="cursor-pointer group relative card w-22 transition-all hover:-translate-y-1 hover:scale-105">
+    <div data-name="${name}" data-position="${position}" class="cursor-pointer group relative card w-18 xs:w-22 sm:w-28 md:w-24 lg:w-22 transition-all hover:-translate-y-1 hover:scale-105">
         <img src="../assets/images/card.webp" alt="Player Card">
         <span class="change-player z-10 absolute left-1/2 -translate-x-1/2 -bottom-1">
-            <i class="hover:animate-spin fa-solid fa-arrows-rotate text-white text-base cursor-pointer"></i>
+            <i class="hover:animate-spin fa-solid fa-arrows-rotate text-white text-xs sm:text-base cursor-pointer"></i>
         </span>
         <span class="delete-player transition-all left-1/2 group-hover:left-full absolute -z-10 top-1/2 -translate-y-1/2 bg-white rounded-full px-[.2rem]">
             <i class="fa-solid fa-trash text-red-700 text-sm cursor-pointer"></i>
         </span>
         <img src="${playerImage || "../assets/images/ano.png"}" alt="${name}" class="absolute bottom-[36%] left-1/2 -translate-x-1/2 w-3/5">
         <div class="flex flex-col items-center absolute font-bold top-[20%] left-[12%] text-secondary">
-            <div class="text-xs">${rating}</div>
-            <span class="text-[.45rem]">${position}</span>
+            <div class="text-[.65rem] sm:text-xs">${rating}</div>
+            <span class="text-[.4rem] sm:text-[.45rem]">${position}</span>
         </div>
         <div class="flex items-center text-secondary flex-col left-0 top-[60%] absolute w-full mt-1.5">
-            <div class="text-[.45rem] text-center font-bold">${name}</div>
+            <div class="text-[.4rem] sm:text-[.45rem] text-center font-bold">${name}</div>
             <div class="flex w-full items-center justify-center gap-2">
-                <img class="w-4" src="${clubLogo}" alt="Club">
-                <img class="h-2.5" src="${countryFlag}" alt="Country">
+                <img class="w-3 sm:w-4" src="${clubLogo}" alt="Club">
+                <img class="h-2 sm:h-2.5" src="${countryFlag}" alt="Country">
             </div>
         </div>
     </div>`
@@ -181,7 +181,7 @@ function emptyFieldCard(position) {
     let tempDiv = document.createElement("div");
 
     tempDiv.innerHTML = `
-                    <div data-position="${position}" class="relative card w-22">
+                    <div data-position="${position}" class="relative card w-18 xs:w-22 sm:w-28 md:w-24 lg:w-22">
                         <img src="../assets/images/card-informe.webp" alt="Player Card">
                         <span class="add-player absolute cursor-pointer border border-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white text-2xl py-1 px-2 rounded-full"><i class="fa-solid fa-plus"></i><span/>
                     </div>

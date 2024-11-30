@@ -10,9 +10,13 @@
     .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
-  }
-}
+    }
 
-.w-22 {
-    width: 5.65rem;
+    .w-22 {
+        width: 5.65rem;
+    }
+
+    .w-18 {
+        width: 4.5rem;
+    }
 }
