@@ -46,6 +46,10 @@
         substitutions.push(playerData);
         showSubstitutionsPlayers();
         closeForm();
+
+        let players = JSON.parse(localStorage.getItem("players"));
+        players.push(playerData);
+        localStorage.setItem("players", JSON.stringify(players));
     }
 
 
