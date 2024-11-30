@@ -18,9 +18,14 @@ showEmptyFieldCards();
 
 async function loadPlayers () {
     if (substitutions.length > 0) return;
+    if (localStorage.getItem("players")) {
+        substitutions = JSON.parse(localStorage.getItem("players"));
+        return;
+    }
 
     let res = await axios('../players.json');
     substitutions = res.data;
+    storePlayersInLocalStorage();
 }
 
 async function showSubstitutionsPlayers(filteredArray = false) {
@@ -303,4 +308,8 @@ function swapTwoCardElements(card, isCardTypeEmpty = false) {
     
     replacedCacheCard = null;
     showSubstitutionsPlayers();
+}
+
+function storePlayersInLocalStorage() {
+    localStorage.setItem("players", JSON.stringify(substitutions));
 }
