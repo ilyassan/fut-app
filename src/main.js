@@ -37,6 +37,15 @@ async function showSubstitutionsPlayers(filteredArray = false) {
         isPlayersActive = true;
     }
 
+    // Sort by rating
+    for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < array.length - 1; j++) {
+            if (array[j].rating < array[j + 1].rating) {
+                [array[j] , array[j + 1]] = [array[j + 1] , array[j]]
+            }
+        }
+    }
+
     array.forEach((player) => {
         let card = substitutionCard(player, isPlayersActive);
         container.appendChild(card);
