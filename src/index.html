@@ -9,6 +9,8 @@
   <link href="../assets/css/output.css" rel="stylesheet">
 </head>
 <body class="bg-slate-950">
+    
+    <!-- Create player form -->
     <div id="create-player-overlay" class="hidden fixed z-50 w-full h-full bg-slate-950 bg-opacity-70">
         <form id="create-player-form" class="block mt-12 mx-auto bg-slate-900 text-white w-11/12 sm:w-4/5 md:w-4/6 lg:w-1/2 p-5 rounded-lg">
             <h3 class="text-3xl text-center font-semibold mb-4">Create Player</h3>
@@ -81,12 +83,16 @@
         </form>
     </div>
 
+    <!-- Player details -->
     <div id="player-details-overlay" class="hidden fixed z-50 w-full h-full bg-slate-950 bg-opacity-70">
         <div id="player-details" class="transition-all duration-500 absolute -left-full -translate-x-1/2 top-1/2 -translate-y-1/2 w-fit rounded-xl bg-gray">
         </div>
     </div>
 
+    <!-- Main content -->
     <main class="flex flex-col gap-10 lg:gap-0 lg:flex-row items-center justify-between xl:justify-around h-full py-3">
+        
+        <!-- Field players -->
         <div id="field" class="relative rounded-lg overflow-hidden max-w-[630px] border-2 border-green-900">
             <img src="../assets/images/stadium_background.webp" alt="field" class="w-full h-full">
 
@@ -106,6 +112,8 @@
 
             </div>
         </div>
+
+        <!-- Substitutions sidebar -->
         <div class="bg-slate-900 w-[300px] rounded-s-lg">
             <div class="px-3 mt-2 pb-3 border-b border-white">
                 <h1 class="text-white text-xl text-center font-semibold">Add Player <span id="show-form-btn" class="text-xl ml-2 cursor-pointer"><i class="fa fa-plus"></i></span></h1>
@@ -115,6 +123,7 @@
 
             </div>
         </div>
+        
         <img class="hidden" src="../assets/images/card.webp"/>
     </main>
     

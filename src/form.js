@@ -22,9 +22,11 @@ function formEvents(){
     loadCountries();
     statsInputsEvents();
 
+    // Open form when the button clicked
     createPlayerBtn.onclick = function (){
         overlay.classList.remove("hidden");
 
+        // Close the form if the user clicked outside it
         overlay.onclick = function(e) {
             if (e.target == overlay) {
                 overlay.classList.add("hidden");
@@ -33,6 +35,7 @@ function formEvents(){
         }
     }
 
+    // Submit logic function
     form.onsubmit = function(e) {
         e.preventDefault();
 
@@ -77,6 +80,7 @@ function formEvents(){
         })
     }
 
+    // Fetch clubs data
     async function loadClubs() {
         let res = await axios("../clubs.json");
         let clubs = res.data;
@@ -102,9 +106,10 @@ function formEvents(){
                 clubImgTag.src = defaultImgSrc;
                 clubImgTag.classList.add("hidden");
             }
-        })
+        });
     }
 
+    // Fetch countries data
     async function loadCountries() {
         let res = await axios("../countries.json");
         let countries = res.data;
@@ -135,7 +140,7 @@ function formEvents(){
 
     function statsInputsEvents() {
         playerStatsInputs.forEach(input => {
-            input.addEventListener("keyup", function(e) {
+            input.addEventListener("keyup", function() {
                 let value = parseInt(input.value);
                 if (value < 0) {
                     input.value = 0;
@@ -146,10 +151,12 @@ function formEvents(){
         })
     }
 
+    // Get data from the form inputs (return an object)
     function getFormData() {
 
         let isGK = positionsInput.value === "GK";
 
+        // Different object properties based on the selected position
         const weights = isGK
             ? {
                 diving: 0.20,
@@ -190,11 +197,14 @@ function formEvents(){
         }
     }
 
+    // Validate playerData object
     function validateData(playerData) {
+        // Regex for special characters
         const nameRegex = /^[^:;?!@&#$<>&'"]+$/;
 
         const emptyRegex = /^\s*$/;
 
+        // Check if player name already exist
         let isExist = substitutions.concat(fieldPlayers).find(player => player.name === playerData.name);
 
         if (isExist) {
@@ -205,6 +215,7 @@ function formEvents(){
             return "Please fill the name field.";
         }
 
+        // If name contain special characters
         if (!nameRegex.test(playerData.name)) {
             return "Invalid characters in the name field.";
         }
@@ -225,13 +236,14 @@ function formEvents(){
             return "Please fill the player stats.";
         }
 
-        return 1;
+        return 1; // Return 1 if the data is correct
     }
 
     function closeForm() {
         overlay.classList.add("hidden");
     }
 
+    // Get the value from the selected option in the select tag html element
     function getSelectedValueFromSelectTag(selectTag) {
 
         const options = selectTag.children;
@@ -244,15 +256,18 @@ function formEvents(){
 
     }
 
+    // Clear form fields
     function clearForm() {
         form.replaceWith(emptyForm);
         formEvents();
     }
 
+    // Capitalaze the name, (input: ilyass anida) => (output: Ilyass Anida)
     function capitalize(string) {
         return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ");
     }
 
+    // Show alert with a custom message
     function showAlert(message) {
         validationAlert.textContent = message;
         validationAlert.classList.remove("hidden");

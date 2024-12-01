@@ -9,7 +9,6 @@ function showPlayerDetails(playerData) {
     playerDetailsContainer.appendChild(getDetailsElementHtml(playerData));
 }
 
-
 function getDetailsElementHtml(playerData) {
 
     let {name, photo:playerImage, position, club, logo, nationality, flag, rating} = playerData;

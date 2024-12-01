@@ -1,14 +1,12 @@
 const positions = ["ST", "LW", "RW", "CM", "CDM", "CB", "RB", "LB", "GK"];
-const allFieldPositions = [["LW", "ST", "RW"], ["CM", "CDM", "CM"], ["LB", "CB", "CB", "RB"], ["GK"]];
-
-let substitutions = [];
-const fieldPlayers = [];
-
+const allFieldPositions = [["LW", "ST", "RW"], ["CM", "CDM", "CM"], ["LB", "CB", "CB", "RB"], ["GK"]]; // 4-3-3
 const formationLines = document.querySelectorAll("#formation .line");
 
-const searchInput = document.getElementById("search-player");
-searchInput.addEventListener("input", () => filterSearch(searchInput.value));
+let substitutions = [];
+let fieldPlayers = [];
 
+
+// Helped variables to avoid variable drilling
 let emptyCacheCard;
 let replacedCacheCard;
 
@@ -16,13 +14,22 @@ showSubstitutionsPlayers();
 showEmptyFieldCards();
 
 
+const searchInput = document.getElementById("search-player");
+searchInput.addEventListener("input", () => filterSearch(searchInput.value));
+
+
+// Get players data
 async function loadPlayers () {
+    // Avoid getting data if its already exist
     if (substitutions.length > 0) return;
+
+    // Get the data from the local storage if its exist
     if (localStorage.getItem("players")) {
         substitutions = JSON.parse(localStorage.getItem("players"));
         return;
     }
 
+    // Fetch data from the local json file
     let res = await axios('../players.json');
     substitutions = res.data;
     storePlayersInLocalStorage();
@@ -43,13 +50,7 @@ async function showSubstitutionsPlayers(filteredArray = false) {
     }
 
     // Sort by rating
-    for (let i = 0; i < array.length; i++) {
-        for (let j = 0; j < array.length - 1; j++) {
-            if (array[j].rating < array[j + 1].rating) {
-                [array[j] , array[j + 1]] = [array[j + 1] , array[j]]
-            }
-        }
-    }
+    array = sortByRating(array);
 
     array.forEach((player) => {
         let card = substitutionCard(player, isPlayersActive);
@@ -59,12 +60,14 @@ async function showSubstitutionsPlayers(filteredArray = false) {
     filterSearch();
 }
 
+// Add player from the substitutions to the field
 function addPlayerToField(playerData) {
     let card = playerFieldCard(playerData);
-    if (emptyCacheCard) {
+
+    if (emptyCacheCard) { // If it added in the place of an empty card
         emptyCacheCard.replaceWith(card);
         emptyCacheCard = null;
-    }else {
+    }else { // If it added in the place of an existed card
         replacedCacheCard.replaceWith(card);
         replacedCacheCard = null; 
     }
@@ -112,6 +115,30 @@ function substitutionCard({name, position, rating, photo:playerImage, logo:clubL
                 </div>`;
 
     return tempDiv.firstElementChild;
+}
+
+function substitutionCardEvents(card, isActive) {
+    card.addEventListener("click", function() {
+        let playerUniqueName = card.getAttribute("data-name");
+        let playerIndex = substitutions.findIndex(player => player.name === playerUniqueName);
+
+        if (isActive) {
+            let playerData = substitutions.splice(playerIndex, 1)[0];
+            fieldPlayers.push(playerData);
+
+            if (replacedCacheCard) { // if there is a card to move it out of the field to the substitutions
+                let replacedPlayerIndex = fieldPlayers.findIndex(player => player.name === replacedCacheCard.getAttribute("data-name"));
+                let replacedPlayerData = fieldPlayers.splice(replacedPlayerIndex, 1)[0];
+                substitutions.push(replacedPlayerData);
+            }
+
+            addPlayerToField(playerData);
+            showSubstitutionsPlayers();
+        }else {
+            let playerData = substitutions[playerIndex];
+            showPlayerDetails(playerData);
+        }
+    })
 }
 
 function playerFieldCard({name, position, rating, photo:playerImage, logo:clubLogo, flag:countryFlag}) {
@@ -232,30 +259,6 @@ function filterSubstitutionsPlayers(position) {
     showSubstitutionsPlayers(filteredArray);
 }
 
-function substitutionCardEvents(card, isActive) {
-    card.addEventListener("click", function() {
-        let playerUniqueName = card.getAttribute("data-name");
-        let playerIndex = substitutions.findIndex(player => player.name === playerUniqueName);
-
-        if (isActive) {
-            let playerData = substitutions.splice(playerIndex, 1)[0];
-            fieldPlayers.push(playerData);
-
-            if (replacedCacheCard) { // if there is a card to move it out of the field to the substitutions
-                let replacedPlayerIndex = fieldPlayers.findIndex(player => player.name === replacedCacheCard.getAttribute("data-name"));
-                let replacedPlayerData = fieldPlayers.splice(replacedPlayerIndex, 1)[0];
-                substitutions.push(replacedPlayerData);
-            }
-
-            addPlayerToField(playerData);
-            showSubstitutionsPlayers();
-        }else {
-            let playerData = substitutions[playerIndex];
-            showPlayerDetails(playerData);
-        }
-    })
-}
-
 function getAvailablePositionsFromOnePosition(position){ // input: ST -> output -> [LW, ST, RW]
     for (let i = 0; i < allFieldPositions.length; i++) {
         for (let j = 0; j < allFieldPositions[i].length; j++) {
@@ -269,7 +272,6 @@ function getAvailablePositionsFromOnePosition(position){ // input: ST -> output 
 function filterSearch() {
     let playersElements = Array.from(document.getElementById("substitutions").children);
     let searchValue = searchInput.value.toLowerCase();
-
 
 
     playersElements.forEach(function(playerElement){
@@ -289,8 +291,9 @@ function filterSearch() {
     })
 }
 
+// Swap to cards on the field
 function swapTwoCardElements(card, isCardTypeEmpty = false) {
-    // Fix positions attribute when changing player then fix delete
+    // Get a clone of the two cards
     let targetCardClone = card.cloneNode(true);
     let replacedCardClone = replacedCacheCard.cloneNode(true);
 
@@ -312,4 +315,16 @@ function swapTwoCardElements(card, isCardTypeEmpty = false) {
 
 function storePlayersInLocalStorage() {
     localStorage.setItem("players", JSON.stringify(substitutions));
+}
+
+// Sort array by rating
+function sortByRating(array) {
+    for (let i = 0; i < array.length; i++) {
+        for (let j = 0; j < array.length - 1; j++) {
+            if (array[j].rating < array[j + 1].rating) {
+                [array[j] , array[j + 1]] = [array[j + 1] , array[j]]
+            }
+        }
+    }
+    return array;
 }
